@@ -13,7 +13,7 @@ public with sharing class CustomerMapper {
             FirstName = contactRequest.firstName,
             LastName = contactRequest.lastName,
             Email = contactRequest.email,
-            Id = accountId
+            AccountId = accountId
         );
     }
 

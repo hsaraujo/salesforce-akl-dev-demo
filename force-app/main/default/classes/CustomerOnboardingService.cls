@@ -1,10 +1,10 @@
 public class CustomerOnboardingService {
     
     @TestVisible
-    private final DmlOperations dmlOperations = new DmlOperations();
+    private DmlOperations dmlOperations = new DmlOperations();
 
     @TestVisible
-    private final CustomerMapper mapper = new CustomerMapper();
+    private CustomerMapper mapper = new CustomerMapper();
 
     public CustomerOnboardingResult onboardNewCustomer(CustomerOnboardingRequest req) {
         validate(req);
@@ -17,8 +17,9 @@ public class CustomerOnboardingService {
         return result;
     }
 
+    @TestVisible
     private void validate(CustomerOnboardingRequest req) {
-        if (req == null) {
+        if (req == null || req.account == null) {
             throw new OnboardingException('Request is required.');
         }
         if (String.isBlank(req.account?.name)) {
@@ -27,7 +28,7 @@ public class CustomerOnboardingService {
         if (String.isBlank(req.account?.countryCode)) {
             throw new OnboardingException('Country is required.');
         }
-        if (req.account?.website?.length() > 255) {
+        if (String.isNotBlank(req.account?.website) && req.account?.website?.length() > 255) {
             throw new OnboardingException('Website is too long.');
         }
     }

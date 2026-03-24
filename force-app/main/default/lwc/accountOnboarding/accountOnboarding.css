@@ -1,0 +1,24 @@
+.result-panel {
+    border-radius: 0.75rem;
+}
+
+.status {
+    font-weight: 700;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.created {
+    background: #dff6dd;
+    color: #1b5e20;
+}
+
+.duplicate {
+    background: #fff4ce;
+    color: #6a4b00;
+}
+
+.rejected {
+    background: #fde7e9;
+    color: #8a0f1a;
+}

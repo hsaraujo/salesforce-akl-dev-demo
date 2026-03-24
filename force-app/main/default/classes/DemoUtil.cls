@@ -7,6 +7,10 @@ public with sharing class DemoUtil {
     private static final Integer SLEEP_MS = 3000;
 
     public static void fakeSlowProcess(){
+        fakeSlowProcess(SLEEP_MS);
+    }
+
+    public static void fakeSlowProcess(Integer sleepMs){
 
         // Convert desired delay into "work". We can't sleep, so we do CPU work.
         // This is intentionally wasteful: repeated hashing.
@@ -17,7 +21,7 @@ public with sharing class DemoUtil {
         // Loop until time elapsed (bounded by CPU governor limit)
         // IMPORTANT: keep the targetMs small (like 500–3000ms) to avoid CPU limit.
         Integer iterations = 0;
-        while (DateTime.now().getTime() - start < SLEEP_MS) {
+        while (DateTime.now().getTime() - start < sleepMs) {
             seed = Crypto.generateDigest('SHA-256', seed);
             iterations++;
 

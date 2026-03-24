@@ -1,0 +1,84 @@
+<template>
+    <lightning-card title="Account Onboarding" icon-name="standard:account">
+        <div class="slds-p-around_medium">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" padding="around-small">
+                    <lightning-input
+                        label="Company Name"
+                        value={companyName}
+                        onchange={handleCompanyName}
+                        required>
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                    <lightning-combobox
+                        label="Country Code"
+                        value={countryCode}
+                        options={countryOptions}
+                        onchange={handleCountryCode}
+                        required>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                    <lightning-input
+                        label="Website (optional)"
+                        value={website}
+                        onchange={handleWebsite}
+                        placeholder="e.g. acme.co.nz">
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" padding="around-small" class="slds-m-top_small">
+                    <div class="slds-grid slds-wrap slds-grid_align-end slds-gap_small">
+                        <lightning-button
+                            variant="neutral"
+                            label="Reset"
+                            onclick={handleReset}
+                            disabled={isLoading}>
+                        </lightning-button>
+
+                        <lightning-button
+                            variant="brand"
+                            label="Onboard"
+                            onclick={handleOnboard}
+                            disabled={disableSubmit}>
+                        </lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <template if:true={isLoading}>
+                <div class="slds-m-top_medium slds-align_absolute-center">
+                    <lightning-spinner alternative-text="Onboarding..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:true={result}>
+                <div class="slds-m-top_medium result-panel slds-p-around_medium slds-box">
+                    <div class="slds-text-heading_small">
+                        Result: <span class={statusClass}>{result.status}</span>
+                    </div>
+
+                    <template if:true={result.Id}>
+                        <div class="slds-m-top_x-small">
+                            Account:
+                            <a href="javascript:void(0)" onclick={navigateToAccount}>
+                                {result.Id}
+                            </a>
+                        </div>
+                    </template>
+
+                    <template if:true={hasMessages}>
+                        <ul class="slds-m-top_small slds-list_dotted">
+                            <template for:each={result.messages} for:item="msg">
+                                <li key={msg}>{msg}</li>
+                            </template>
+                        </ul>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

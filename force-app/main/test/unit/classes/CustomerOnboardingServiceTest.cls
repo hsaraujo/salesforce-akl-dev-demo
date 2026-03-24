@@ -90,44 +90,89 @@ private class CustomerOnboardingServiceTest {
     }
 
     @IsTest
-    static void validateTest(){
-
-        CustomerOnboardingService service = new CustomerOnboardingService();
-
+    static void validateNullAccountTest(){
+        
         CustomerOnboardingRequest req = new CustomerOnboardingRequest();
-
+        
         Exception validateException;
         try{
+            CustomerOnboardingService service = new CustomerOnboardingService();
             service.validate(req);
         }catch(Exception e){
             validateException = e;
         }
         Assert.isNotNull(validateException);
+        Assert.areEqual('Request is required.', validateException.getMessage());
+    }
 
-        req.account = new CustomerOnboardingRequest.Account();
-        req.account.name = 'Company Name';
-        try{
-            validateException = null;
-            service.validate(req);
-        }catch(Exception e){
-            validateException = e;
-        }
-        Assert.isNotNull(validateException);
-
+    @IsTest
+    static void validateNullAccountNameTest(){
         
+        CustomerOnboardingRequest req = new CustomerOnboardingRequest();
+        req.account = new CustomerOnboardingRequest.Account();
+        
+        Exception validateException;
+        try{
+            CustomerOnboardingService service = new CustomerOnboardingService();
+            service.validate(req);
+        }catch(Exception e){
+            validateException = e;
+        }
+        Assert.isNotNull(validateException);
+        Assert.areEqual('Company Name is required.', validateException.getMessage());
+    }
+
+    @IsTest
+    static void validateNullCountryCodeTest(){
+        
+        CustomerOnboardingRequest req = new CustomerOnboardingRequest();
+        req.account = new CustomerOnboardingRequest.Account();
+        req.account.name = 'Test';
+        
+        Exception validateException;
+        try{
+            CustomerOnboardingService service = new CustomerOnboardingService();
+            service.validate(req);
+        }catch(Exception e){
+            validateException = e;
+        }
+        Assert.isNotNull(validateException);
+        Assert.areEqual('Country is required.', validateException.getMessage());
+    }
+
+    @IsTest
+    static void validateLongWebsiteTest(){
+        
+        CustomerOnboardingRequest req = new CustomerOnboardingRequest();
+        req.account = new CustomerOnboardingRequest.Account();
+        req.account.name = 'Test';
         req.account.countryCode = 'NZ';
         req.account.website = 'http://superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstrin_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring_superlongstring.com';
+        
+        Exception validateException;
         try{
-            validateException = null;
+            CustomerOnboardingService service = new CustomerOnboardingService();
             service.validate(req);
         }catch(Exception e){
             validateException = e;
         }
         Assert.isNotNull(validateException);
+        Assert.areEqual('Website is too long.', validateException.getMessage());
+    }
 
-        req.account.website = 'http://test.com';
+
+    @IsTest
+    static void validateSuccessTest(){
+
+        CustomerOnboardingRequest req = new CustomerOnboardingRequest();
+        req.account = new CustomerOnboardingRequest.Account();
+        req.account.name = 'Test';
+        req.account.countryCode = 'NZ';
+        req.account.website = 'http://google.com';
+        
+        Exception validateException;
         try{
-            validateException = null;
+            CustomerOnboardingService service = new CustomerOnboardingService();
             service.validate(req);
         }catch(Exception e){
             validateException = e;

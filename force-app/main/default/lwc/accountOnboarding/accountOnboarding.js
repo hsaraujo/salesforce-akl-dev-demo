@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import onboard from '@salesforce/apex/AccountOnboardingController.onboard';
+import onboard from '@salesforce/apex/CustomerOnboardingController.onboard';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 
@@ -7,6 +7,10 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
     companyName = '';
     countryCode = 'NZ';
     website = '';
+
+    contactFirstName = '';
+    contactLastName = '';
+    contactEmail = '';
 
     isLoading = false;
     @track result;
@@ -18,7 +22,10 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
     ];
 
     get disableSubmit() {
-        return this.isLoading || !this.companyName?.trim() || !this.countryCode;
+        return this.isLoading
+            || !this.companyName?.trim()
+            || !this.countryCode
+            || !this.contactLastName?.trim();
     }
 
     get hasMessages() {
@@ -37,10 +44,19 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
     handleCountryCode(e) { this.countryCode = e.detail.value; }
     handleWebsite(e) { this.website = e.detail.value; }
 
+    handleContactFirstName(e) { this.contactFirstName = e.detail.value; }
+    handleContactLastName(e) { this.contactLastName = e.detail.value; }
+    handleContactEmail(e) { this.contactEmail = e.detail.value; }
+
     handleReset() {
         this.companyName = '';
         this.countryCode = 'NZ';
         this.website = '';
+
+        this.contactFirstName = '';
+        this.contactLastName = '';
+        this.contactEmail = '';
+
         this.result = null;
     }
 
@@ -49,14 +65,25 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
         this.result = null;
 
         try {
+
+            let requestObj = {
+                account: {
+                    name: this.companyName,
+                    countryCode: this.countryCode,
+                    website: this.website
+                },
+                contact: {
+                    firstName: this.contactFirstName,
+                    lastName: this.contactLastName,
+                    email: this.contactEmail,
+                }
+            }
             
-            const account = await onboard({
-                name: this.companyName,
-                countryCode: this.countryCode,
-                website: this.website
+            const res = await onboard({ 
+                requestJSON: JSON.stringify(requestObj)
             });
 
-            this.result = account;
+            this.result = res;
 
             this.dispatchEvent(new ShowToastEvent({ title: 'Created', message: 'Customer onboarded', variant: 'success' }));
         } catch (err) {
@@ -72,11 +99,11 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
     }
 
     navigateToAccount() {
-        if (!this.result?.Id) return;
+        if (!this.result?.accountId) return;
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
-                recordId: this.result.Id,
+                recordId: this.result.accountId,
                 objectApiName: 'Account',
                 actionName: 'view'
             }

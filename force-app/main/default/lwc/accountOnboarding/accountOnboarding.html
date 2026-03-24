@@ -30,6 +30,39 @@
                     </lightning-input>
                 </lightning-layout-item>
 
+                <lightning-accordion class="slds-m-top_small" allow-multiple-sections-open>
+                    <lightning-accordion-section name="primaryContact" label="Primary Contact">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                                <lightning-input
+                                    label="First Name"
+                                    value={contactFirstName}
+                                    onchange={handleContactFirstName}>
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                                <lightning-input
+                                    label="Last Name"
+                                    value={contactLastName}
+                                    onchange={handleContactLastName}
+                                    required>
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" medium-device-size="6" padding="around-small">
+                                <lightning-input
+                                    type="email"
+                                    label="Email"
+                                    value={contactEmail}
+                                    onchange={handleContactEmail}
+                                    placeholder="e.g. jane.doe@acme.co.nz">
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+
                 <lightning-layout-item size="12" padding="around-small" class="slds-m-top_small">
                     <div class="slds-grid slds-wrap slds-grid_align-end slds-gap_small">
                         <lightning-button

@@ -1,5 +1,5 @@
 <template>
-    <lightning-card title="Account Onboarding" icon-name="standard:account">
+    <lightning-card title="Customer Onboarding" icon-name="standard:account">
         <div class="slds-p-around_medium">
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="12" padding="around-small">
@@ -91,14 +91,26 @@
             <template if:true={result}>
                 <div class="slds-m-top_medium result-panel slds-p-around_medium slds-box">
                     <div class="slds-text-heading_small">
-                        Result: <span class={statusClass}>{result.status}</span>
+                        Result:
+                        <template if:true={executionTime}>
+                            <span> {executionTime}s.</span>
+                        </template>
                     </div>
 
-                    <template if:true={result.Id}>
+                    <template if:true={result.accountId}>
                         <div class="slds-m-top_x-small">
                             Account:
                             <a href="javascript:void(0)" onclick={navigateToAccount}>
-                                {result.Id}
+                                {result.accountId}
+                            </a>
+                        </div>
+                    </template>
+
+                    <template if:true={result.contactId}>
+                        <div class="slds-m-top_x-small">
+                            Contact:
+                            <a href="javascript:void(0)" onclick={navigateToContact}>
+                                {result.contactId}
                             </a>
                         </div>
                     </template>

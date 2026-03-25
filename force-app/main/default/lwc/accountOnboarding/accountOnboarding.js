@@ -12,6 +12,8 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
     contactLastName = '';
     contactEmail = '';
 
+    executionTime;
+
     isLoading = false;
     @track result;
 
@@ -56,6 +58,7 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
         this.contactFirstName = '';
         this.contactLastName = '';
         this.contactEmail = '';
+        this.executionTime = null;
 
         this.result = null;
     }
@@ -79,9 +82,13 @@ export default class AccountOnboarding extends NavigationMixin(LightningElement)
                 }
             }
             
+            const startTime = performance.now();
             const res = await onboard({ 
                 requestJSON: JSON.stringify(requestObj)
             });
+            const endTime = performance.now();
+
+            this.executionTime = Math.round((endTime - startTime) / 1000);
 
             this.result = res;
 
